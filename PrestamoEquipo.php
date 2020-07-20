@@ -32,6 +32,9 @@
         $userarray[$aux]=$id_user;
         $aux++;
       }
+      $rolsheet= \PhpOffice\PhpSpreadsheet\IOFactory::load('RolesItFO.xlsx');
+      $rolworksheet=$rolsheet->setActiveSheetIndexByName('RolesITOtros');
+      $rolmax= $rolworksheet->getHighestRow();
     $spreadsheet= \PhpOffice\PhpSpreadsheet\IOFactory::load('SolicitudHardwareSoftwareFO.xlsx');
     $worksheet=$spreadsheet->setActiveSheetIndexByName('PrestamoEquipo');
     $max = $worksheet->getHighestRow();
@@ -57,6 +60,35 @@
       $worksheet->getCell('K'.($max+$i+1))->setValue($_POST['Requerimiento']);
       $worksheet->getCell('L'.($max+$i+1))->setValue($_POST['Cantidad']);
     }
+    $rolworksheet->getCell('A'.($rolmax+1))->setValue($_POST[id_user4]);
+    $rolworksheet->getCell('A'.($rolmax+2))->setValue($_POST[id_user5]);
+    $rolworksheet->getCell('A'.($rolmax+3))->setValue($_POST[id_user6]);
+    $rolworksheet->getCell('B'.($rolmax+1))->setValue(4);
+    $rolworksheet->getCell('B'.($rolmax+2))->setValue(5);
+    $rolworksheet->getCell('B'.($rolmax+3))->setValue(6);
+    $rolworksheet->getCell('C'.($rolmax+1))->setValue(1);
+    $rolworksheet->getCell('C'.($rolmax+2))->setValue(1);
+    $rolworksheet->getCell('C'.($rolmax+3))->setValue(1);
+    $rolworksheet->getCell('D'.($rolmax+1))->setValue(2);
+    $rolworksheet->getCell('D'.($rolmax+2))->setValue(2);
+    $rolworksheet->getCell('D'.($rolmax+3))->setValue(2);
+
+    for ($i=0; $i <3 ; $i++) {
+      $rolworksheet->getCell('E'.($rolmax+$i+1))->setValue($_POST['id_solicitud']);
+      $rolworksheet->getCell('F'.($rolmax+$i+1))->setValue($_POST['FechaIT']);
+      $rolworksheet->getCell('G'.($rolmax+$i+1))->setValue($_POST['ValidacionIT']);
+      $rolworksheet->getCell('H'.($rolmax+$i+1))->setValue($_POST['JustificacionIT']);
+      $rolworksheet->getCell('I'.($rolmax+$i+1))->setValue($_POST['MarcaIT']);
+      $rolworksheet->getCell('J'.($rolmax+$i+1))->setValue($_POST['ModeloIT']);
+      $rolworksheet->getCell('K'.($rolmax+$i+1))->setValue($_POST['SerialIT']);
+    }
+    $writer2 = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($rolsheet, 'Xlsx');
+    $writer2->save('RolesItFO.xlsx');
+
+
+
+
+
     $worksheet->getCell('A'.($max+1))->setValue($_POST['id_user1']);
       $worksheet->getCell('A'.($max+2))->setValue($_POST['id_user2']);
       $worksheet->getCell('A'.($max+3))->setValue($_POST['id_user4']);
@@ -208,6 +240,26 @@
           <option value="Necesita correccion">Necesita correccion</option>
           <option value="Rechazado">Rechazado</option>
         </select>
+        <label for="FechaIT">Fecha IT Analisis</label>
+        <input type="text" id="FechaIT" name="FechaIT" value="">
+        <br>
+        <label for="ValidacionIT">Validacion IT</label>
+        <select class="" name="ValidacionIT">
+          <option value="Disponible">Disponible</option>
+        </select>
+        <br>
+        <label for="JustificacionIT">Justificacion</label>
+        <input type="text" id="JustificacionIT" name="JustificacionIT" value="">
+        <br>
+        <label for="MarcaIT">Marca</label>
+        <input type="text" id="MarcaIT" name="MarcaIT" value="">
+        <br>
+        <label for="ModeloIT">Modelo</label>
+        <input type="text" id="ModeloIT" name="ModeloIT" value="">
+        <br>
+        <label for="SerialIT">Numero Serial</label>
+        <input type="text" id="SerialIT" name="SerialIT" value="">
+        <br>
       <br>
 
 

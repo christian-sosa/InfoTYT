@@ -19,8 +19,7 @@
       $workflow[1]="Gerente";
       $workflow[2]="Gerente General";
       $workflow[3]="Analista IT";
-      $workflow[4]="Jefe IT";
-      $workflow[5]="Gerente IT";
+      $workflow[4]="Gerente IT";
       $userarray=Array();
       $id_rolearray=Array();
       $aux=0;
@@ -33,6 +32,9 @@
         $userarray[$aux]=$id_user;
         $aux++;
       }
+      $rolsheet= \PhpOffice\PhpSpreadsheet\IOFactory::load('RolesItFO.xlsx');
+      $rolworksheet=$rolsheet->setActiveSheetIndexByName('RolesITOtros');
+      $rolmax= $rolworksheet->getHighestRow();
     $spreadsheet= \PhpOffice\PhpSpreadsheet\IOFactory::load('SolicitudHardwareSoftwareFO.xlsx');
     $worksheet=$spreadsheet->setActiveSheetIndexByName('SolicitudServicioTelefonico');
     $max = $worksheet->getHighestRow();
@@ -45,7 +47,7 @@
       $id_solicitud++;
     }
     if($_POST){
-    for ($i=0; $i <6 ; $i++) {
+    for ($i=0; $i <5 ; $i++) {
       $worksheet->getCell('B'.($max+$i+1))->setValue($i+1);
       $worksheet->getCell('C'.($max+$i+1))->setValue($_POST['id_solicitud']);
       $worksheet->getCell('D'.($max+$i+1))->setValue($_POST['Cambiar']);
@@ -62,12 +64,32 @@
       $worksheet->getCell('Q'.($max+$i+1))->setValue($_POST['Fecha']);
 
     }
+    $rolworksheet->getCell('A'.($rolmax+1))->setValue($_POST[id_user4]);
+    $rolworksheet->getCell('A'.($rolmax+2))->setValue($_POST[id_user6]);
+    $rolworksheet->getCell('B'.($rolmax+1))->setValue(4);
+    $rolworksheet->getCell('B'.($rolmax+2))->setValue(6);
+    $rolworksheet->getCell('C'.($rolmax+1))->setValue(1);
+    $rolworksheet->getCell('C'.($rolmax+2))->setValue(1);
+    $rolworksheet->getCell('D'.($rolmax+1))->setValue(3);
+    $rolworksheet->getCell('D'.($rolmax+2))->setValue(3);
+
+    for ($i=0; $i <2 ; $i++) {
+      $rolworksheet->getCell('E'.($rolmax+$i+1))->setValue($_POST['id_solicitud']);
+      $rolworksheet->getCell('F'.($rolmax+$i+1))->setValue($_POST['FechaIT']);
+      $rolworksheet->getCell('I'.($rolmax+$i+1))->setValue($_POST['MarcaIT']);
+      $rolworksheet->getCell('J'.($rolmax+$i+1))->setValue($_POST['ModeloIT']);
+      $rolworksheet->getCell('K'.($rolmax+$i+1))->setValue($_POST['SerialIT']);
+    }
+    $writer2 = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($rolsheet, 'Xlsx');
+    $writer2->save('RolesItFO.xlsx');
+
+
+
     $worksheet->getCell('A'.($max+1))->setValue($_POST['id_user1']);
       $worksheet->getCell('A'.($max+2))->setValue($_POST['id_user2']);
       $worksheet->getCell('A'.($max+3))->setValue($_POST['id_user3']);
       $worksheet->getCell('A'.($max+4))->setValue($_POST['id_user4']);
-      $worksheet->getCell('A'.($max+5))->setValue($_POST['id_user5']);
-      $worksheet->getCell('A'.($max+6))->setValue($_POST['id_user6']);
+      $worksheet->getCell('A'.($max+5))->setValue($_POST['id_user6']);
 
     $worksheet->getCell('L'.($max+1))->setValue($_POST['Comentario1']);
     $worksheet->getCell('M'.($max+1))->setValue($_POST['estado1']);
@@ -77,10 +99,8 @@
     $worksheet->getCell('M'.($max+3))->setValue($_POST['estado3']);
     $worksheet->getCell('L'.($max+4))->setValue($_POST['Comentario4']);
     $worksheet->getCell('M'.($max+4))->setValue($_POST['estado4']);
-    $worksheet->getCell('L'.($max+5))->setValue($_POST['Comentario5']);
-    $worksheet->getCell('M'.($max+5))->setValue($_POST['estado5']);
-    $worksheet->getCell('L'.($max+6))->setValue($_POST['Comentario6']);
-    $worksheet->getCell('M'.($max+6))->setValue($_POST['estado6']);
+    $worksheet->getCell('L'.($max+5))->setValue($_POST['Comentario6']);
+    $worksheet->getCell('M'.($max+5))->setValue($_POST['estado6']);
 
 
     $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
@@ -121,13 +141,6 @@
           <select class="" name="id_user4">
             <?php for ($indice=0; $indice <=count($userarray) ; $indice++) {?>
               <?php  if($id_rolearray[$indice]==4){?>
-                <option value="<?php echo  $userarray[$indice]; ?>"><?php echo $userarray[$indice]; ?></option>
-              <?php }}?>
-          </select>
-          <label for="id_user5">Id_user para Jefe IT</label>
-          <select class="" name="id_user5">
-            <?php for ($indice=0; $indice <=count($userarray) ; $indice++) {?>
-              <?php  if($id_rolearray[$indice]==5){?>
                 <option value="<?php echo  $userarray[$indice]; ?>"><?php echo $userarray[$indice]; ?></option>
               <?php }}?>
           </select>
@@ -204,15 +217,6 @@
         <option value="Rechazado">Rechazado</option>
       </select>
       <br>
-      <label for="Comentario5">Comentario Estado Solicitud para Jefe IT</label>
-      <input type="text" id="Comentario5" name="Comentario5" value="">
-      <label for="estado5">Estado para Jefe IT</label>
-      <select class="" name="estado5">
-        <option value="Aprobada">Aprobada</option>
-        <option value="Necesita correccion">Necesita correccion</option>
-        <option value="Rechazado">Rechazado</option>
-      </select>
-      <br>
       <label for="Comentario6">Comentario Estado Solicitud para Gerente IT</label>
       <input type="text" id="Comentario6" name="Comentario6" value="">
       <label for="estado6">Estado para Gerente IT</label>
@@ -233,6 +237,18 @@
       <label for="Fecha">Especificacion tecnica Fecha</label>
       <input type="text" id="Fecha" name="Fecha" value="">
       <br>
+      <label for="MarcaIT">Marca</label>
+        <input type="text" id="MarcaIT" name="MarcaIT" value="">
+        <br>
+        <label for="ModeloIT">Modelo</label>
+        <input type="text" id="ModeloIT" name="ModeloIT" value="">
+        <br>
+        <label for="SerialIT">Numero Serial</label>
+        <input type="text" id="SerialIT" name="SerialIT" value="">
+        <br>
+        <label for="FechaIT">Fecha IT Analisis</label>
+        <input type="text" id="FechaIT" name="FechaIT" value="">
+        <br>
       <br>
 
       <button type="submit" class="btn btn-primary mb-2">Enviar</button>

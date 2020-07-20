@@ -33,6 +33,9 @@
         $userarray[$aux]=$id_user;
         $aux++;
       }
+      $rolsheet= \PhpOffice\PhpSpreadsheet\IOFactory::load('RolesItFO.xlsx');
+      $rolworksheet=$rolsheet->setActiveSheetIndexByName('RolesIT');
+      $rolmax= $rolworksheet->getHighestRow();
       $spreadsheet= \PhpOffice\PhpSpreadsheet\IOFactory::load('SolicitudHardwareSoftwareFO.xlsx');
       $worksheet=$spreadsheet->setActiveSheetIndexByName('SolicitudAdquisicion');
       $max = $worksheet->getHighestRow();
@@ -55,6 +58,46 @@
         $worksheet->getCell('G'.($max+$i+1))->setValue($_POST['Justificacion']);
         $worksheet->getCell('H'.($max+$i+1))->setValue($_POST['Informacion']);
       }
+      $rolworksheet->getCell('A'.($rolmax+1))->setValue($_POST[id_user4]);
+      $rolworksheet->getCell('A'.($rolmax+2))->setValue($_POST[id_user5]);
+      $rolworksheet->getCell('A'.($rolmax+3))->setValue($_POST[id_user6]);
+      $rolworksheet->getCell('B'.($rolmax+1))->setValue(4);
+      $rolworksheet->getCell('B'.($rolmax+2))->setValue(5);
+      $rolworksheet->getCell('B'.($rolmax+3))->setValue(6);
+      $rolworksheet->getCell('C'.($rolmax+1))->setValue(1);
+      $rolworksheet->getCell('C'.($rolmax+2))->setValue(1);
+      $rolworksheet->getCell('C'.($rolmax+3))->setValue(1);
+      $rolworksheet->getCell('D'.($rolmax+1))->setValue(1);
+      $rolworksheet->getCell('D'.($rolmax+2))->setValue(1);
+      $rolworksheet->getCell('D'.($rolmax+3))->setValue(1);
+      $rolworksheet->getCell('G'.($rolmax+1))->setValue($_POST[Clarificacion1]);
+      $rolworksheet->getCell('G'.($rolmax+2))->setValue($_POST[Clarificacion2]);
+      $rolworksheet->getCell('G'.($rolmax+3))->setValue($_POST[Clarificacion3]);
+      for ($i=0; $i <3 ; $i++) {
+        $rolworksheet->getCell('E'.($rolmax+$i+1))->setValue($_POST['id_solicitud']);
+        $rolworksheet->getCell('F'.($rolmax+$i+1))->setValue($_POST['Fecha']);
+        $rolworksheet->getCell('H'.($rolmax+$i+1))->setValue($_POST['Marca']);
+        $rolworksheet->getCell('I'.($rolmax+$i+1))->setValue($_POST['Modelo']);
+        $rolworksheet->getCell('J'.($rolmax+$i+1))->setValue($_POST['Especificacion']);
+        $rolworksheet->getCell('K'.($rolmax+$i+1))->setValue($_POST['Control1']);
+        $rolworksheet->getCell('L'.($rolmax+$i+1))->setValue($_POST['CantidadPresupuestada']);
+        $rolworksheet->getCell('M'.($rolmax+$i+1))->setValue($_POST['CantidadConsumida']);
+        $rolworksheet->getCell('N'.($rolmax+$i+1))->setValue($_POST['CantidadCompra']);
+        $rolworksheet->getCell('O'.($rolmax+$i+1))->setValue($_POST['Saldo1']);
+        $rolworksheet->getCell('P'.($rolmax+$i+1))->setValue($_POST['Observacion1']);
+        $rolworksheet->getCell('R'.($rolmax+$i+1))->setValue($_POST['Control2']);
+        $rolworksheet->getCell('S'.($rolmax+$i+1))->setValue($_POST['MontoPresupuestado']);
+        $rolworksheet->getCell('T'.($rolmax+$i+1))->setValue($_POST['MontoConsumido']);
+        $rolworksheet->getCell('U'.($rolmax+$i+1))->setValue($_POST['MontoCompra']);
+        $rolworksheet->getCell('V'.($rolmax+$i+1))->setValue($_POST['Saldo2']);
+        $rolworksheet->getCell('W'.($rolmax+$i+1))->setValue($_POST['Observacion2']);
+      }
+      $writer2 = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($rolsheet, 'Xlsx');
+      $writer2->save('RolesItFO.xlsx');
+
+
+
+
       $worksheet->getCell('A'.($max+1))->setValue($_POST['id_user1']);
       $worksheet->getCell('A'.($max+2))->setValue($_POST['id_user2']);
       $worksheet->getCell('A'.($max+3))->setValue($_POST['id_user3']);
@@ -206,6 +249,70 @@
           <option value="Rechazado">Rechazado</option>
         </select>
         <br>
+        <label for="Fecha">Fecha IT recepcion</label>
+        <input type="text" id="Fecha" name="Fecha" value="">
+        <br>
+        <label for="Clarificacion1">Clarificacion analista IT</label>
+        <input type="text" id="Clarificacion1" name="Clarificacion1" value="">
+        <br>
+        <label for="Clarificacion2">Clarificacion Jefe IT</label>
+        <input type="text" id="Clarificacion2" name="Clarificacion2" value="">
+        <br>
+        <label for="Clarificacion3">Clarificacion gerente IT</label>
+        <input type="text" id="Clarificacion3" name="Clarificacion3" value="">
+        <br>
+        <label for="Marca">Marca</label>
+        <input type="text" id="Marca" name="Marca" value="">
+        <br>
+        <label for="Modelo">Modelo</label>
+        <input type="text" id="Modelo" name="Modelo" value="">
+        <br>
+        <label for="Especificacion">Especificacion tecnica</label>
+        <input type="text" id="Especificacion" name="Especificacion" value="">
+        <br>
+        <label for="Control1">Presupuesto aceptado 1er control</label>
+        <input type="text" id="Control1" name="Control1" value="">
+        <br>
+        <label for="CantidadPresupuestada">Cantidad presupuestada 1er control</label>
+        <input type="text" id="CantidadPresupuestada" name="CantidadPresupuestada" value="">
+        <br>
+        <label for="CantidadConsumida">Cantidad ya consumida 1er control</label>
+        <input type="text" id="CantidadConsumida" name="CantidadConsumida" value="">
+        <br>
+        <label for="CantidadCompra">Cantidad de esta compra 1er control</label>
+        <input type="text" id="CantidadCompra" name="CantidadCompra" value="">
+        <br>
+        <label for="Saldo1">Saldo IT 1er control</label>
+        <input type="text" id="Saldo1" name="Saldo1" value="">
+        <br>
+        <label for="Observacion1">Observacion 1er control</label>
+        <input type="text" id="Observacion1" name="Observacion1" value="">
+        <br>
+        <label for="Aclaracion1">Aclaracion 1er control</label>
+        <input type="text" id="Aclaracion1" name="Aclaracion1" value="">
+        <br>
+        <label for="Control2">Presupuesto aceptado 2do control</label>
+        <input type="text" id="Control2" name="Control2" value="">
+        <br>
+        <label for="MontoPresupuestado">Monto Presupuestodo 2do control</label>
+        <input type="text" id="MontoPresupuestado" name="MontoPresupuestado" value="">
+        <br>
+        <label for="MontoConsumido">Monto consumido 2do control</label>
+        <input type="text" id="MontoConsumido" name="MontoConsumido" value="">
+        <br>
+        <label for="MontoCompra">Monto de esta compra 2do control</label>
+        <input type="text" id="MontoCompra" name="MontoCompra" value="">
+        <br>
+        <label for="Saldo2">Saldo IT 2do control</label>
+        <input type="text" id="Saldo2" name="Saldo2" value="">
+        <br>
+        <label for="Observacion2">Observacion 2do control</label>
+        <input type="text" id="Observacion2" name="Observacion2" value="">
+        <br>
+        <label for="Aclaracion2">Aclaracion 2do control</label>
+        <input type="text" id="Aclaracion2" name="Aclaracion2" value="">
+        <br>
+
 
         <button type="submit" class="btn btn-primary mb-2">Enviar</button>
       </form>
